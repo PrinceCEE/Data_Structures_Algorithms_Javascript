@@ -11,7 +11,7 @@ package sorting
 //
 // The worst case scenario is when the array is sorted in the reverse order, because for
 // each iteration, there will always be a swap, and only one swap. The time complexity of
-// the worst case scenario is O(n^2) because the inner loop runs for n - 1, n - 2 ... 2, 1 times.
+// the worst case scenario is O(n^2) because the inner loop runs for n - 1 + n - 2 +...+ 2 + 1 times.
 //
 // The best case scenario is when the algorithm is sorted, and there's no swaps.
 //

@@ -1,6 +1,8 @@
 package datastructures
 
-import "errors"
+import (
+	"errors"
+)
 
 type Queue[T any] struct {
 	data []T

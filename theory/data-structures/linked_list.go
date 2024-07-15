@@ -1,87 +1,87 @@
 package datastructures
 
 type Node[T comparable] struct {
-	data T
-	next *Node[T]
+	Data T
+	Next *Node[T]
 }
 
 type LinkedList[T comparable] struct {
-	head *Node[T]
+	Head *Node[T]
 }
 
-func (list *LinkedList[T]) append(data T) {
-	node := &Node[T]{data: data}
+func (list *LinkedList[T]) Append(data T) {
+	node := &Node[T]{Data: data}
 
-	if list.head == nil {
-		list.head = node
+	if list.Head == nil {
+		list.Head = node
 		return
 	}
 
-	current := list.head
-	for current.next != nil {
-		current = current.next
+	current := list.Head
+	for current.Next != nil {
+		current = current.Next
 	}
-	current.next = node
+	current.Next = node
 }
 
-func (list *LinkedList[T]) prepend(data T) {
-	node := &Node[T]{data: data}
+func (list *LinkedList[T]) Prepend(data T) {
+	node := &Node[T]{Data: data}
 
-	node.next = list.head
-	list.head = node
+	node.Next = list.Head
+	list.Head = node
 }
 
-func (list *LinkedList[T]) deleteWithValue(data T) {
-	if list.head == nil {
+func (list *LinkedList[T]) DeleteWithValue(data T) {
+	if list.Head == nil {
 		return
 	}
 
-	if list.head.data == data {
-		list.head = list.head.next
+	if list.Head.Data == data {
+		list.Head = list.Head.Next
 		return
 	}
 
-	current := list.head
-	for current.next != nil {
-		if current.next.data == data {
-			current.next = current.next.next
+	current := list.Head
+	for current.Next != nil {
+		if current.Next.Data == data {
+			current.Next = current.Next.Next
 			return
 		}
-		current = current.next
+		current = current.Next
 	}
 }
 
-func (list *LinkedList[T]) find(data T) *Node[T] {
-	current := list.head
+func (list *LinkedList[T]) Find(data T) *Node[T] {
+	current := list.Head
 	for current != nil {
-		if current.data == data {
+		if current.Data == data {
 			return current
 		}
-		current = current.next
+		current = current.Next
 	}
 	return nil
 }
 
-func (list *LinkedList[T]) length() int {
+func (list *LinkedList[T]) Length() int {
 	length := 0
-	current := list.head
+	current := list.Head
 	for current != nil {
 		length++
-		current = current.next
+		current = current.Next
 	}
 	return length
 }
 
-func (list *LinkedList[T]) reverse() {
+func (list *LinkedList[T]) Reverse() {
 	var prev, next *Node[T]
 
-	current := list.head
+	current := list.Head
 	for current != nil {
-		next = current.next
-		current.next = prev
+		next = current.Next
+		current.Next = prev
 		prev = current
 		current = next
 	}
 
-	list.head = prev
+	list.Head = prev
 }

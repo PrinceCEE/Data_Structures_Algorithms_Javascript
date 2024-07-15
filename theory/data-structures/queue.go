@@ -5,11 +5,11 @@ import (
 )
 
 type Queue[T any] struct {
-	data []T
+	Data []T
 }
 
 func (q *Queue[T]) EnQueue(data T) {
-	q.data = append(q.data, data)
+	q.Data = append(q.Data, data)
 }
 
 func (q *Queue[T]) DeQueue() (T, error) {
@@ -18,14 +18,14 @@ func (q *Queue[T]) DeQueue() (T, error) {
 		return x, errors.New("queue is empty")
 	}
 
-	data := q.data[0]
-	q.data = q.data[1:]
+	data := q.Data[0]
+	q.Data = q.Data[1:]
 
 	return data, nil
 }
 
 func (q *Queue[T]) Size() int {
-	return len(q.data)
+	return len(q.Data)
 }
 
 func (q *Queue[T]) Peek() (T, error) {
@@ -34,5 +34,5 @@ func (q *Queue[T]) Peek() (T, error) {
 		return x, errors.New("queue is empty")
 	}
 
-	return q.data[0], nil
+	return q.Data[0], nil
 }

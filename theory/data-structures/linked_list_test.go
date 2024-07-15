@@ -9,87 +9,87 @@ import (
 func TestLinkedList(t *testing.T) {
 	t.Run("test append", func(t *testing.T) {
 		list := &LinkedList[int]{}
-		assert.Nil(t, list.head)
+		assert.Nil(t, list.Head)
 
-		list.append(1)
-		list.append(2)
-		list.append(3)
+		list.Append(1)
+		list.Append(2)
+		list.Append(3)
 
-		assert.Equal(t, 1, list.head.data)
-		assert.Equal(t, 2, list.head.next.data)
-		assert.Equal(t, 3, list.head.next.next.data)
+		assert.Equal(t, 1, list.Head.Data)
+		assert.Equal(t, 2, list.Head.Next.Data)
+		assert.Equal(t, 3, list.Head.Next.Next.Data)
 	})
 
 	t.Run("test prepend", func(t *testing.T) {
 		list := &LinkedList[int]{}
-		assert.Nil(t, list.head)
+		assert.Nil(t, list.Head)
 
-		list.prepend(1)
-		list.prepend(2)
-		list.prepend(3)
+		list.Prepend(1)
+		list.Prepend(2)
+		list.Prepend(3)
 
-		assert.Equal(t, 3, list.head.data)
-		assert.Equal(t, 2, list.head.next.data)
-		assert.Equal(t, 1, list.head.next.next.data)
+		assert.Equal(t, 3, list.Head.Data)
+		assert.Equal(t, 2, list.Head.Next.Data)
+		assert.Equal(t, 1, list.Head.Next.Next.Data)
 	})
 
 	t.Run("test delete with value", func(t *testing.T) {
 		list := &LinkedList[int]{}
-		assert.Nil(t, list.head)
+		assert.Nil(t, list.Head)
 
-		list.append(1)
-		list.append(2)
-		list.append(3)
-		list.deleteWithValue(2)
+		list.Append(1)
+		list.Append(2)
+		list.Append(3)
+		list.DeleteWithValue(2)
 
-		assert.Equal(t, 3, list.head.next.data)
+		assert.Equal(t, 3, list.Head.Next.Data)
 
-		list.deleteWithValue(1)
-		assert.Equal(t, 3, list.head.data)
+		list.DeleteWithValue(1)
+		assert.Equal(t, 3, list.Head.Data)
 	})
 
 	t.Run("test find", func(t *testing.T) {
 		list := &LinkedList[int]{}
-		assert.Nil(t, list.head)
+		assert.Nil(t, list.Head)
 
-		list.append(1)
-		list.append(2)
-		list.append(3)
+		list.Append(1)
+		list.Append(2)
+		list.Append(3)
 
-		node := list.find(2)
+		node := list.Find(2)
 		assert.NotNil(t, node)
-		assert.Equal(t, 2, node.data)
+		assert.Equal(t, 2, node.Data)
 
-		node = list.find(4)
+		node = list.Find(4)
 		assert.Nil(t, node)
 	})
 
 	t.Run("test length", func(t *testing.T) {
 		list := &LinkedList[int]{}
-		assert.Nil(t, list.head)
+		assert.Nil(t, list.Head)
 
-		list.append(1)
-		list.append(2)
-		list.append(3)
+		list.Append(1)
+		list.Append(2)
+		list.Append(3)
 
-		assert.Equal(t, 3, list.length())
+		assert.Equal(t, 3, list.Length())
 
-		list.deleteWithValue(2)
-		assert.Equal(t, 2, list.length())
+		list.DeleteWithValue(2)
+		assert.Equal(t, 2, list.Length())
 	})
 
 	t.Run("test reverse", func(t *testing.T) {
 		list := &LinkedList[int]{}
-		assert.Nil(t, list.head)
+		assert.Nil(t, list.Head)
 
-		list.append(1)
-		list.append(2)
-		list.append(3)
+		list.Append(1)
+		list.Append(2)
+		list.Append(3)
 
-		list.reverse()
-		assert.NotNil(t, list.head)
-		assert.Equal(t, 3, list.head.data)
-		assert.Equal(t, 2, list.head.next.data)
-		assert.Equal(t, 1, list.head.next.next.data)
+		list.Reverse()
+		assert.NotNil(t, list.Head)
+		assert.Equal(t, 3, list.Head.Data)
+		assert.Equal(t, 2, list.Head.Next.Data)
+		assert.Equal(t, 1, list.Head.Next.Next.Data)
 	})
 }

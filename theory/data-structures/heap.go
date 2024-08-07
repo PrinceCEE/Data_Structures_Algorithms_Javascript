@@ -1,99 +1,117 @@
 package datastructures
 
-// Heaps implementations use arrays for ease of getting and inserting the last data.
-// To get a node's left child, we use (i x 2) + 1, while we use (i x 2) + 2 for the
-// right child.
-// To get a node's parent, we use (i - 1)/2 using integer division
-type Heap struct {
+import (
+	"errors"
+)
+
+var (
+	ErrEmptyHeap = errors.New("heap is empty")
+)
+
+// Heaps are binary trees that are both complete and partially ordered in a certain way
+// A complete binary tree is a binary tree that has all the levels filled with the exception
+// of the last level which must be filled from the left
+//
+// Heaps are divided into Min/Max heap primarily. The min heap must have the node's value
+// always less than its children, while the max node must have the node's value always
+// greater than the its children
+//
+// The min and max heaps are implemented the same way, but only differ in their value
+// comparisons.
+type MinHeap struct {
 	Data []int
 }
 
-func NewHeap() *Heap {
-	return &Heap{Data: []int{}}
+func NewMinHeap() *MinHeap {
+	return &MinHeap{Data: []int{}}
 }
 
-func (h *Heap) GetRootNode() int {
-	return h.Data[0]
+func (h *MinHeap) Size() int {
+	return len(h.Data)
 }
 
-func (h *Heap) GetLastNode() int {
-	return h.Data[len(h.Data)-1]
+func (h *MinHeap) Peek() (int, error) {
+	if h.Size() == 0 {
+		return 0, ErrEmptyHeap
+	}
+	return h.Data[0], nil
 }
 
-func (h *Heap) GetLeftChildIndex(index int) int {
-	return (2 * index) + 1
+func (h *MinHeap) Add(i int) {
+	h.Data = append(h.Data, i)
+	h.heapifyUp()
 }
 
-func (h *Heap) GetRightChildIndex(index int) int {
-	return (2 * index) + 2
+func (h *MinHeap) Pop() (int, error) {
+	if h.Size() == 0 {
+		return 0, ErrEmptyHeap
+	}
+
+	value := h.Data[0]
+	h.Data[0] = h.Data[h.Size()-1]
+	h.Data = h.Data[:h.Size()-1]
+	h.heapifyDown()
+
+	return value, nil
 }
 
-func (h *Heap) GetParentIndex(index int) int {
-	return (index - 1) / 2
+func (h *MinHeap) swap(i, j int) {
+	h.Data[i], h.Data[j] = h.Data[j], h.Data[i]
 }
 
-// Appends the data to the end of the array, and trickles it up
-// its correct position by iteratively check it against its parent and swapping
-func (h *Heap) Insert(data int) {
-	h.Data = append(h.Data, data)
-
-	newNodeIndex := len(h.Data) - 1
-
-	for newNodeIndex > 0 && h.Data[newNodeIndex] > h.Data[h.GetParentIndex(newNodeIndex)] {
-		h.Data[newNodeIndex], h.Data[h.GetParentIndex(newNodeIndex)] =
-			h.Data[h.GetParentIndex(newNodeIndex)], h.Data[newNodeIndex]
-
-		newNodeIndex = h.GetParentIndex(newNodeIndex)
+func (h *MinHeap) heapifyUp() {
+	i := h.Size() - 1
+	for h.hasParent(i) {
+		pi := h.getParentIndex(i)
+		if h.Data[i] < h.Data[pi] {
+			h.swap(i, pi)
+		}
+		i = pi
 	}
 }
 
-// Replaces the root with the last element in the array,
-// then trickle the value down to its right position by
-// iteratively swapping it with its child that is greater
-func (h *Heap) Delete() int {
-	n := len(h.Data)
-	if n == 0 {
-		return -1
+func (h *MinHeap) heapifyDown() {
+	i := 0
+	for h.hasLeftChild(i) {
+		smallestIdx := h.getLeftChildIndex(i)
+		if h.hasRightChild(i) && h.Data[h.getRightChildIndex(i)] < h.Data[smallestIdx] {
+			smallestIdx = h.getRightChildIndex(i)
+		}
+
+		if h.Data[i] <= h.Data[smallestIdx] {
+			break
+		} else {
+			h.swap(i, smallestIdx)
+			i = smallestIdx
+		}
 	}
-
-	max := h.Data[0]
-	h.Data[0] = h.Data[n-1]
-	h.Data = h.Data[:n-1]
-
-	index := 0
-	for h.HasGreaterChild(index) {
-		largerIndex := h.GetLargerIndex(index)
-		h.Data[index], h.Data[largerIndex] = h.Data[largerIndex], h.Data[index]
-		index = largerIndex
-	}
-
-	return max
 }
 
-func (h *Heap) HasGreaterChild(index int) bool {
-	l := h.GetLeftChildIndex(index)
-	r := h.GetRightChildIndex(index)
-	n := len(h.Data)
-
-	if l <= n-1 && h.Data[l] > h.Data[index] {
-		return true
-	}
-
-	if r <= n-1 && h.Data[r] > h.Data[index] {
-		return true
-	}
-
-	return false
+func (h *MinHeap) getLeftChildIndex(i int) int {
+	return 2*i + 1
 }
 
-func (h *Heap) GetLargerIndex(index int) int {
-	l := h.GetLeftChildIndex(index)
-	r := h.GetRightChildIndex(index)
-	n := len(h.Data)
+func (h *MinHeap) getRightChildIndex(i int) int {
+	return 2*i + 2
+}
 
-	if l <= n-1 && h.Data[l] > h.Data[index] && r <= n-1 && h.Data[l] > h.Data[r] {
-		return l
+func (h *MinHeap) getParentIndex(i int) int {
+	return (i - 1) / 2
+}
+
+func (h *MinHeap) hasLeftChild(i int) bool {
+	return h.getLeftChildIndex(i) < len(h.Data)
+}
+
+func (h *MinHeap) hasRightChild(i int) bool {
+	return h.getRightChildIndex(i) < len(h.Data)
+}
+
+func (h *MinHeap) hasParent(i int) bool {
+	if i == 0 {
+		return false
 	}
 
-	return r
+	parentIdx := h.getParentIndex(i)
+	return parentIdx >= 0
 }

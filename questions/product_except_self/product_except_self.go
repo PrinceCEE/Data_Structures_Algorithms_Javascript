@@ -24,3 +24,5 @@ func ProductExceptSelf(nums []int) []int {
 
 	return answer
 }
+
+// Time and space complexities are O(n) and O(1) respectively
